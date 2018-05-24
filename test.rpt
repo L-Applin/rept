@@ -1,5 +1,21 @@
-inc(r0)
-  r1 <- r0
-  inc(r1)
-r2 <- r1
-r0 <- 0
+inc r0
+r1 <- r0
+inc r1
+r10 <- r1
+r0 <- 10
+r255 <- 100
+
+repeat r0
+
+  inc r3
+  inc r4
+
+  repeat r4
+
+    inc r5
+
+  end
+
+  r0 <- r5
+
+end
