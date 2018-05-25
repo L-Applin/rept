@@ -10,10 +10,12 @@ RÉPÉTÉ BNF :
 
 <macro>     ::=     <id> <reg-list> 
 <macro-def> ::=     "definde-macro" <id> <reg-list> <body> 
-<body>      ::=     <cmd> | <cmd> <macro-body>
 
+<body>      ::=     <cmd> | <cmd> <body>
 <reg-list>  ::=     <register> | <register> <reg-list>
-<id>        ::=     ...texte...
 <register>  ::=     "r" <int>
+
+<id>        ::=     ...texte...
 <int>       ::=     <num> | <int> <num>
 <num>       ::=     0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
