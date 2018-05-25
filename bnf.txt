@@ -11,7 +11,7 @@ RÉPÉTÉ BNF :
 <macro>     ::=     <id> <reg-list> 
 <macro-def> ::=     "definde-macro" <id> <reg-list> <body> 
 
-<body>      ::=     <cmd> | <cmd> <body>
+<body>      ::=     <cmd> "end" | <cmd> <body> "end"
 <reg-list>  ::=     <register> | <register> <reg-list>
 <register>  ::=     "r" <int>
 
