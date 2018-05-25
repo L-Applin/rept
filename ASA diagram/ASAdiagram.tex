@@ -1,0 +1,27 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[french]{babel}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{xparse}
+\usepackage{soul,xcolor}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\usepackage[MeX]{}
+\usepackage{cancel}
+\usepackage{qtree}
+\begin{document}
+\Tree [.exp [.$\leftarrow$ $r_i$ $r_j$ ] 
+			[.exp [.$\leftarrow$ $r_i$ $r_j$ ] 
+			     [.exp [.<inc> $r_i$ ] 
+			          [.exp [.$rep\;n_i$ body ] 
+[.exp [.<macro> [.exp 
+                [.$\leftarrow$ $r_i$ $r_j$ ]
+                [.exp [.<inc> $r_i$ ] {\ldots} ] ] ] {\ldots} ] ]
+] ] ]
+\end{document}
