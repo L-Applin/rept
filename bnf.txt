@@ -1,21 +1,22 @@
 RÉPÉTÉ BNF :
 
-<prog>      ::=     <instr> | <instr> <prog>
-<instr>     ::=     <cmd> | <macro-def>
-<cmd>       ::=     <inc> | <move> | <rpt> | <macro>
+<prog>        ::=     <instr> | <instr> <prog>
+<instr>       ::=     <cmd> | <macro-def>
+<cmd>         ::=     <inc> | <move> | <rpt> | <macro>
 
-<inc>       ::=     "inc" <register>
-<move>      ::=     <register> "<-" <register>
-<rpt>       ::=     "repeat" <register> <body>
+<inc>         ::=     "inc" <register>
+<move>        ::=     <register> "<-" <register>
+<rpt>         ::=     "repeat" <register> <body>
 
-<macro>     ::=     <id> <reg-list> 
-<macro-def> ::=     "definde-macro" <id> <reg-list> <body> 
+<macro>       ::=     <id> <reg-list> 
+<macro-def>   ::=     "definde-macro" <id> <reg-list> <body> 
 
-<body>      ::=     <cmd> "end" | <cmd> <body> "end"
-<reg-list>  ::=     <register> | <register> <reg-list>
-<register>  ::=     "r" <int>
+<inner-body>  ::=     <cmd> | <cmd> <inner-body>
+<body>        ::=     <inner-body> "end"
+<reg-list>    ::=     <register> | <register> <reg-list>
+<register>    ::=     "r" <int>
 
-<id>        ::=     ...texte...
-<int>       ::=     <num> | <int> <num>
-<num>       ::=     0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+<id>          ::=     ...texte...
+<int>         ::=     <num> | <int> <num>
+<num>         ::=     0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
