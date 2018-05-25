@@ -1,0 +1,19 @@
+RÉPÉTÉ BNF :
+
+<prog>      ::=     <instr> | <instr> <prog>
+<instr>     ::=     <cmd> | <macro-def>
+<cmd>       ::=     <inc> | <move> | <rpt> | <macro>
+
+<inc>       ::=     "inc" <register>
+<move>      ::=     <register> "<-" <register>
+<rpt>       ::=     "repeat" <register> <body>
+
+<macro>     ::=     <id> <reg-list> 
+<macro-def> ::=     "definde-macro" <id> <reg-list> <body> 
+<body>      ::=     <cmd> | <cmd> <macro-body>
+
+<reg-list>  ::=     <register> | <register> <reg-list>
+<id>        ::=     ...texte...
+<register>  ::=     "r" <int>
+<int>       ::=     <num> | <int> <num>
+<num>       ::=     0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
