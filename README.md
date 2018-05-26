@@ -43,13 +43,12 @@ GRAMMAR                                            ACTION
 <mv>        ::=    REG MOVE (REG | INT)            reg[<register1>] = reg[<register2>]
 <rpt>       ::=    REPEAT REG <body>               repeats all commands in body <register> amount of time
 
+<body>      ::=    <innerbody> END                none        
+<innerbody> ::=    <cmd> | <cmd> <innerbody>      none      
+
 <mac>       ::=    REG MOVE ID <reglist>           execute all commands within matchin f macro definition
 <macdef>    ::=    DEF ID <reglist> <body>         define all actions to be done upon calling macro
-
-<body>      ::=    <inner-body> END                none        
-<innerbody> ::=    <cmd> | <cmd> <inner-body>      none      
 <reglist>   ::=    REG | REG <reglist>             none
-<register>  ::=    REG                             none
 
 
 tokens : 

@@ -9,14 +9,14 @@ for i in range(REGISTER_SIZE):
     register.append(INIT_VALUE)
 
 # tokens
-tokens = ('REG', 'MOVE', 'INC', 'ID', 'REPEAT', 'DEF', 'INT')
+tokens = ('REG', 'MOVE', 'INC', 'ID', 'REPEAT', 'DEF', 'INT', 'END')
 
 t_MOVE = '<-'
 t_INC = 'inc'
 t_ID = r'[_a-zA-Z][_a-zA-Z0-9]'
 t_DEF= 'DEFINE-MACRO'
 t_REPEAT = 'repeat'
-
+t_END = 'end'
 
 def t_REG(t):
     r'r\d+'
@@ -61,7 +61,7 @@ def p_rpt(p):
 
 def p_body(p):
     '''body : innerbody END'''
-    p[0] =('body', p[1])
+    p[0] =('body', p[1], p[2])
 
 def p_innerbody(p):
     '''innerbody : cmd | cmd innerbody'''
@@ -71,14 +71,21 @@ def p_innerbody(p):
         p[0] = (p[1], p[2])
 
 
+
+# should it be replaced by a first pass of the file where macros are replaced ?
 def p_mac(p):
     '''mac : REG MOVE ID reglist'''
     p[0] = ('replace', p[1], p[3], p[4])
     # p3 should be the macdef with good 
 
 def p_macdef(p):
-    '''macdef : ID reglist'''
+    '''macdef : DEF ID reglist body'''
+    p[0] = ("def", p[2], p[3], p]4)
 
-    
-
+def p_reglist(p):
+    '''reglist : REG | REG reglist'''
+    if len(p) == 1:
+        p[0] = p[1]
+    else: 
+        p[0] = ('list', p[1], p[2])
 

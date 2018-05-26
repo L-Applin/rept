@@ -17,8 +17,7 @@ GRAMMAR                                                     ACTION
 
 <body>          ::=     <inner-body> END                    none        
 <innerbody>     ::=     <cmd> | <cmd> <inner-body>          none      
-<reglist>       ::=     REG | REG <reg-list>                none
-<register>      ::=     REG                                 none
+<reglist>       ::=     REG | REG <reglist>                none
 
 
 tokens : 
