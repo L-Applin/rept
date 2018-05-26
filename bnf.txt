@@ -1,22 +1,43 @@
-RÉPÉTÉ BNF :
 
-<prog>        ::=     <instr> | <instr> <prog>
-<instr>       ::=     <cmd> | <macro-def>
-<cmd>         ::=     <inc> | <move> | <rpt> | <macro>
+GRAMMAR                                                     ACTION
+-----------------------------------------------------       -----------------------------------------------------
+<prog>          ::=     <instr> | <instr> <prog>            none           
+<instr>         ::=     <cmd> | <mac>                       none          
+<cmd>           ::=     <incr>                              none
+                        | <mv>                         
+                        | <rpt> 
+                        | <mac>              
 
-<inc>         ::=     "inc" <register>
-<move>        ::=     <register> "<-" <register>
-<rpt>         ::=     "repeat" <register> <body>
+<incr>          ::=     INC REG                             reg[<register>] = reg[<register>] + 1
+<mv>            ::=     REG MOVE (REG | INT)                reg[<register1>] = reg[<register2>]
+<rpt>           ::=     REPEAT REG <body>                   repeats all commands in body <register> amount of time
 
-<macro>       ::=     <id> <reg-list> 
-<macro-def>   ::=     "definde-macro" <id> <reg-list> <body> 
+<mac>           ::=     REG MOVE ID <reglist>              execute all commands within matchin f macro definition
+<macdef>        ::=     DEF ID <reglist> <body>            define all actions to be done upon calling macro
 
-<inner-body>  ::=     <cmd> | <cmd> <inner-body>
-<body>        ::=     <inner-body> "end"
-<reg-list>    ::=     <register> | <register> <reg-list>
-<register>    ::=     "r" <int>
+<body>          ::=     <inner-body> END                    none        
+<innerbody>     ::=     <cmd> | <cmd> <inner-body>          none      
+<reglist>       ::=     REG | REG <reg-list>                none
+<register>      ::=     REG                                 none
 
-<id>          ::=     ...texte...
-<int>         ::=     <num> | <int> <num>
-<num>         ::=     0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+tokens : 
+    REG : r\d+
+    MOVE : <- 
+    INC : inc rn
+    INT : \d+
+    ID : ([_a-zA-Z])([_a-zA-Z0-9]+)
+
+syntaxe exemple :
+
+inc r1
+r5 <- 4
+r6 <- 3
+
+DEFINE-MACRO mult r1 r2
+    repeat r2
+        repeat r1
+            inc r0
+
+r2 <- mult r5 r6
 
