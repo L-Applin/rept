@@ -62,6 +62,8 @@ tokens :
 ### Parsing
 For parsing the .repeat file, I choose to go with the pyhton library [PLY][ply]. This is a robust a classic library to work easily with BNF Grammar syntax. [Documentation][ply doc] for the library can be found by following the link.
 
+### TODO:
+Macros
 
 [info theo]: https://sites.google.com/site/dirotappift2105/
 [alain tapp]: http://diro.umontreal.ca/repertoire-departement/vue/tapp-alain/
