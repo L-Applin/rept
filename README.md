@@ -10,9 +10,9 @@ Note : this is a personal project that I'm doing for fun and learning. Don't exp
 ### The langage
 *Repeat* is a very simple, very contrived and very limited "programming langage". I made some very slight modification to the syntax Mr Tapp used in his class but everything else is exactly the same. Firts, it has an infinitly large amount of register that can each store an integer as large as needed. Second, it has only a few operations that can be made on those register : 
 
-1. Increment the value stored in a register : `inc r<sub>i<\sub>`
-2. Move the value from one register to another : `r<sub>i<\sub> <- r<sub>j<\sub>` 
-3. Repeat a block of commands by the amount of a register : `repeat r<sub>i<\sub> <list of commands to repeat>`
+1. Increment the value stored in a register : `inc ri`
+2. Move the value from one register to another : `ri <- rj` 
+3. Repeat a block of commands by the amount of a register : `repeat ri <list of commands to repeat>`
 4. It also has the ability to define *non-rucursive* macro to make the code more readable
 
 ### Grammar
