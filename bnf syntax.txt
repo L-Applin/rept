@@ -2,7 +2,7 @@
 GRAMMAR                                                     ACTION
 -----------------------------------------------------       -----------------------------------------------------
 <prog>          ::=     <instr> | <instr> <prog>            none           
-<instr>         ::=     <cmd> | <mac>                       none          
+<instr>         ::=     <cmd> | <macdef>                    none          
 <cmd>           ::=     <incr>                              none
                         | <mv>                         
                         | <rpt> 
@@ -12,12 +12,12 @@ GRAMMAR                                                     ACTION
 <mv>            ::=     REG MOVE (REG | INT)                reg[<register1>] = reg[<register2>]
 <rpt>           ::=     REPEAT REG <body>                   repeats all commands in body <register> amount of time
 
-<mac>           ::=     REG MOVE ID <reglist>              execute all commands within matchin f macro definition
-<macdef>        ::=     DEF ID <reglist> <body>            define all actions to be done upon calling macro
+<mac>           ::=     REG MOVE ID <reglist>               execute all commands within matchin f macro definition
+<macdef>        ::=     DEF ID <reglist> <body>             define all actions to be done upon calling macro
 
 <body>          ::=     <inner-body> END                    none        
 <innerbody>     ::=     <cmd> | <cmd> <inner-body>          none      
-<reglist>       ::=     REG | REG <reglist>                none
+<reglist>       ::=     REG | REG <reglist>                 none
 
 
 tokens : 
@@ -33,10 +33,15 @@ inc r1
 r5 <- 4
 r6 <- 3
 
-DEFINE-MACRO mult r1 r2
-    repeat r2
-        repeat r1
-            inc r0
+DEFINE-MACRO mult a b
+    repeat a
+        repeat b
+            inc rm
 
-r2 <- mult r5 r6
-
+r2 <- mult r5 r6 # deviendra :  
+repeat r5
+    repeat r6
+        inc rm
+    end
+end
+r2 <- rm
