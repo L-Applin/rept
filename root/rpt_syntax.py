@@ -1,12 +1,13 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+
 from Debug import Debug
 
 INIT_VALUE = 0
 REGISTER_SIZE = 64
-DEBUG = False
 FILE_URL = 'programs/test.repeat'
+TIMES = 'programs/times.repeat'
 
 # register initialization 
 register = []
@@ -38,7 +39,7 @@ def t_END(t):
     r'end'
     return t
 
-def t_EF(t):
+def t_DEF(t):
     r'DEFINE-MACRO'
     return t
 
@@ -104,7 +105,6 @@ def p_mv(p):
           | REG MOVE INT'''
     p[0] = (p[2], p[1], p[3])
 
-# repeat the BODY for mem[REG[]] amount of time 
 def p_rpt(p):
     '''rpt : REPEAT REG body'''
     p[0] = ('repeat', p[2], p[3])
@@ -171,7 +171,6 @@ def eval_exp(exp):
     else:
         print('ERROR : malformed expression')
 
-
 def eval_inc(exp):
     """     
     # exp[0] = register to increment
@@ -182,8 +181,6 @@ def eval_inc(exp):
     register[exp[0]['val']] = register[exp[0]['val']] + 1
     if DEBUG:
         print("after  : r" + str(exp[0]['val']) + ' = ' + str(register[exp[0]['val']]))
-
-
 
 def eval_move(exp):
     """     
@@ -222,6 +219,7 @@ def eval_repeat(exp):
         eval_body(exp[1][1])
 
 
+# TODO: eval macros
 
 # main eval function
 def eval(exp):
@@ -251,7 +249,7 @@ def eval(exp):
     
     
 # file handling
-testFile = open(FILE_URL, mode="r")
+testFile = open(TIMES, mode="r")
 testData = ""
 for line in testFile:
     testData += line

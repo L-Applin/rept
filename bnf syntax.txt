@@ -36,7 +36,10 @@ r6 <- 3
 DEFINE-MACRO mult a b
     repeat a
         repeat b
-            inc rm
+            inc rn
+        end
+    end
+end
 
 r2 <- mult r5 r6 # deviendra :  
 repeat r5
@@ -44,4 +47,4 @@ repeat r5
         inc rm
     end
 end
-r2 <- rm
+r2 <- rn
