@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'DEF END ID INC INT MOVE REG REPEATprog : instr \n            | instr proginstr : cmd \n             | macdefcmd : incr \n           | mv \n           | rpt \n           | macincr : INC REGmv : REG MOVE REG \n          | REG MOVE INTrpt : REPEAT REG bodybody : innerbody ENDinnerbody : cmd \n                 | cmd innerbodymac : REG MOVE ID reglistmacdef : DEF ID reglist bodyreglist : REG \n               | REG reglist'
+_lr_signature = 'DEF END ID INC INT LP MOVE REG REPEAT RPprog : instr \n            | instr proginstr : cmd \n             | macdefcmd : incr \n           | mv \n           | rpt \n           | macincr : INC REGmv : REG MOVE REG \n          | REG MOVE INTrpt : REPEAT REG bodybody : innerbody ENDinnerbody : cmd \n                 | cmd innerbodymac : REG MOVE ID reglistmacdef : DEF ID reglist bodyinnerreglist : REG \n                    | REG innerreglistreglist : LP innerreglist RP '
     
-_lr_action_items = {'INC':([0,2,3,5,7,8,11,12,13,16,18,19,20,21,23,24,26,27,29,30,],[1,1,-3,-8,-7,-6,-5,-4,-9,1,-18,1,-12,1,-11,-10,-19,-17,-13,-16,]),'$end':([2,3,4,5,7,8,11,12,13,14,18,20,23,24,26,27,29,30,],[-1,-3,0,-8,-7,-6,-5,-4,-9,-2,-18,-12,-11,-10,-19,-17,-13,-16,]),'INT':([17,],[23,]),'REG':([0,1,2,3,5,7,8,9,11,12,13,15,16,17,18,19,20,21,23,24,25,26,27,29,30,],[10,13,10,-3,-8,-7,-6,16,-5,-4,-9,18,10,24,18,10,-12,10,-11,-10,18,-19,-17,-13,-16,]),'END':([5,7,8,11,13,18,20,21,22,23,24,26,28,29,30,],[-8,-7,-6,-5,-9,-18,-12,-14,29,-11,-10,-19,-15,-13,-16,]),'REPEAT':([0,2,3,5,7,8,11,12,13,16,18,19,20,21,23,24,26,27,29,30,],[9,9,-3,-8,-7,-6,-5,-4,-9,9,-18,9,-12,9,-11,-10,-19,-17,-13,-16,]),'MOVE':([10,],[17,]),'ID':([6,17,],[15,25,]),'DEF':([0,2,3,5,7,8,11,12,13,18,20,23,24,26,27,29,30,],[6,6,-3,-8,-7,-6,-5,-4,-9,-18,-12,-11,-10,-19,-17,-13,-16,]),}
+_lr_action_items = {'DEF':([0,2,4,5,7,8,9,10,16,22,23,25,26,30,31,33,],[1,-8,-5,-6,-3,-4,-7,1,-9,-12,-10,-11,-17,-13,-16,-20,]),'INT':([17,],[25,]),'ID':([1,17,],[13,24,]),'END':([2,4,5,9,16,20,21,22,23,25,29,30,31,33,],[-8,-5,-6,-7,-9,-14,30,-12,-10,-11,-15,-13,-16,-20,]),'REPEAT':([0,2,4,5,7,8,9,10,14,16,18,20,22,23,25,26,30,31,33,],[6,-8,-5,-6,-3,-4,-7,6,6,-9,6,6,-12,-10,-11,-17,-13,-16,-20,]),'INC':([0,2,4,5,7,8,9,10,14,16,18,20,22,23,25,26,30,31,33,],[11,-8,-5,-6,-3,-4,-7,11,11,-9,11,11,-12,-10,-11,-17,-13,-16,-20,]),'REG':([0,2,4,5,6,7,8,9,10,11,14,16,17,18,19,20,22,23,25,26,27,30,31,33,],[12,-8,-5,-6,14,-3,-4,-7,12,16,12,-9,23,12,27,12,-12,-10,-11,-17,27,-13,-16,-20,]),'MOVE':([12,],[17,]),'LP':([13,24,],[19,19,]),'RP':([27,28,32,],[-18,33,-19,]),'$end':([2,3,4,5,7,8,9,10,15,16,22,23,25,26,30,31,33,],[-8,0,-5,-6,-3,-4,-7,-1,-2,-9,-12,-10,-11,-17,-13,-16,-20,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'mv':([0,2,16,19,21,],[8,8,8,8,8,]),'reglist':([15,18,25,],[19,26,30,]),'body':([16,19,],[20,27,]),'macdef':([0,2,],[12,12,]),'innerbody':([16,19,21,],[22,22,28,]),'cmd':([0,2,16,19,21,],[3,3,21,21,21,]),'prog':([0,2,],[4,14,]),'mac':([0,2,16,19,21,],[5,5,5,5,5,]),'instr':([0,2,],[2,2,]),'incr':([0,2,16,19,21,],[11,11,11,11,11,]),'rpt':([0,2,16,19,21,],[7,7,7,7,7,]),}
+_lr_goto_items = {'innerreglist':([19,27,],[28,32,]),'mac':([0,10,14,18,20,],[2,2,2,2,2,]),'prog':([0,10,],[3,15,]),'body':([14,18,],[22,26,]),'reglist':([13,24,],[18,31,]),'incr':([0,10,14,18,20,],[4,4,4,4,4,]),'mv':([0,10,14,18,20,],[5,5,5,5,5,]),'innerbody':([14,18,20,],[21,21,29,]),'cmd':([0,10,14,18,20,],[7,7,20,20,20,]),'macdef':([0,10,],[8,8,]),'rpt':([0,10,14,18,20,],[9,9,9,9,9,]),'instr':([0,10,],[10,10,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,23 +27,24 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> prog","S'",1,None,None,None),
-  ('prog -> instr','prog',1,'p_prog','rpt_syntax.py',95),
-  ('prog -> instr prog','prog',2,'p_prog','rpt_syntax.py',96),
-  ('instr -> cmd','instr',1,'p_instr','rpt_syntax.py',103),
-  ('instr -> macdef','instr',1,'p_instr','rpt_syntax.py',104),
-  ('cmd -> incr','cmd',1,'p_cmd','rpt_syntax.py',108),
-  ('cmd -> mv','cmd',1,'p_cmd','rpt_syntax.py',109),
-  ('cmd -> rpt','cmd',1,'p_cmd','rpt_syntax.py',110),
-  ('cmd -> mac','cmd',1,'p_cmd','rpt_syntax.py',111),
-  ('incr -> INC REG','incr',2,'p_incr','rpt_syntax.py',115),
-  ('mv -> REG MOVE REG','mv',3,'p_mv','rpt_syntax.py',119),
-  ('mv -> REG MOVE INT','mv',3,'p_mv','rpt_syntax.py',120),
-  ('rpt -> REPEAT REG body','rpt',3,'p_rpt','rpt_syntax.py',124),
-  ('body -> innerbody END','body',2,'p_body','rpt_syntax.py',128),
-  ('innerbody -> cmd','innerbody',1,'p_innerbody','rpt_syntax.py',132),
-  ('innerbody -> cmd innerbody','innerbody',2,'p_innerbody','rpt_syntax.py',133),
-  ('mac -> REG MOVE ID reglist','mac',4,'p_mac','rpt_syntax.py',141),
-  ('macdef -> DEF ID reglist body','macdef',4,'p_macdef','rpt_syntax.py',146),
-  ('reglist -> REG','reglist',1,'p_reglist','rpt_syntax.py',150),
-  ('reglist -> REG reglist','reglist',2,'p_reglist','rpt_syntax.py',151),
+  ('prog -> instr','prog',1,'p_prog','rpt_syntax.py',97),
+  ('prog -> instr prog','prog',2,'p_prog','rpt_syntax.py',98),
+  ('instr -> cmd','instr',1,'p_instr','rpt_syntax.py',105),
+  ('instr -> macdef','instr',1,'p_instr','rpt_syntax.py',106),
+  ('cmd -> incr','cmd',1,'p_cmd','rpt_syntax.py',110),
+  ('cmd -> mv','cmd',1,'p_cmd','rpt_syntax.py',111),
+  ('cmd -> rpt','cmd',1,'p_cmd','rpt_syntax.py',112),
+  ('cmd -> mac','cmd',1,'p_cmd','rpt_syntax.py',113),
+  ('incr -> INC REG','incr',2,'p_incr','rpt_syntax.py',117),
+  ('mv -> REG MOVE REG','mv',3,'p_mv','rpt_syntax.py',121),
+  ('mv -> REG MOVE INT','mv',3,'p_mv','rpt_syntax.py',122),
+  ('rpt -> REPEAT REG body','rpt',3,'p_rpt','rpt_syntax.py',126),
+  ('body -> innerbody END','body',2,'p_body','rpt_syntax.py',130),
+  ('innerbody -> cmd','innerbody',1,'p_innerbody','rpt_syntax.py',134),
+  ('innerbody -> cmd innerbody','innerbody',2,'p_innerbody','rpt_syntax.py',135),
+  ('mac -> REG MOVE ID reglist','mac',4,'p_mac','rpt_syntax.py',143),
+  ('macdef -> DEF ID reglist body','macdef',4,'p_macdef','rpt_syntax.py',148),
+  ('innerreglist -> REG','innerreglist',1,'p_innerreglist','rpt_syntax.py',152),
+  ('innerreglist -> REG innerreglist','innerreglist',2,'p_innerreglist','rpt_syntax.py',153),
+  ('reglist -> LP innerreglist RP','reglist',3,'p_reglist','rpt_syntax.py',160),
 ]

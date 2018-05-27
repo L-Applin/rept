@@ -1,12 +1,8 @@
-# TIMES (r1, r2)
-# 8 * 4
-
-MACRO times r1 r2
-    r1 <- 8
-    r2 <- 4
-    repeat r1
-        repeat r2
-            inc r0
-        end
+r1 <- 8
+r2 <- 4
+repeat r1
+    repeat r2
+        inc r0
     end
-end-macro
+end
+

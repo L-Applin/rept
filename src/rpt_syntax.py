@@ -34,7 +34,7 @@ macros= {}
 # This is where the langage syntax is defined.
 
 # tokens
-tokens = ('REG', 'INC', 'MOVE', 'REPEAT', 'DEF', 'INT', 'END', 'ID')
+tokens = ('REG', 'INC', 'MOVE', 'REPEAT', 'DEF', 'INT', 'END', 'ID', 'RP', 'LP')
 
 def t_COMMENT(t):
     r'\#.*'
@@ -69,6 +69,8 @@ def t_INT(t):
 
 t_MOVE = r'<-'
 t_ID = r'[_a-zA-Z][_a-zA-Z0-9]+'
+t_LP = r'\('
+t_RP = r'\)'
 
 # Define a rule so we can track line numbers
 def t_newline(t):
@@ -146,14 +148,17 @@ def p_macdef(p):
     '''macdef : DEF ID reglist body'''
     p[0] = [ "def", p[2], p[3], p[4] ]
 
-def p_reglist(p):
-    '''reglist : REG 
-               | REG reglist'''
+def p_innerreglist(p):
+    '''innerreglist : REG 
+                    | REG innerreglist'''
     if len(p) == 2:
         p[0] = [ p[1], 'nil']
     elif len(p) == 3: 
         p[0] = [ p[1], p[2] ]
-
+   
+def p_reglist(p):
+    '''reglist : LP innerreglist RP '''
+    p[0] = p[2]
 
 # ========================
 #    MACRO replacement
@@ -166,6 +171,8 @@ def p_reglist(p):
 # to replace each branch that is a macro call by the right macro definition Tree.
 
 def find_macro_def(exp):
+
+    print(exp)
     
     if exp[0] == 'exp':
         if len(exp) == 3: # continue on exp1 and exp2
@@ -181,16 +188,18 @@ def find_macro_def(exp):
         exp[3] = body
         '''
         m = Macro(exp[1], exp[2], exp[3])
-        macros[str(exp[1])] = m
+        macros[exp[1]] = m
 
-def macro_expand(tree):
+def macro_expand(tree, parent):
+
     
     if tree[0] == 'exp':
         if len(tree) == 3: # continue on exp1 and exp2
-            macro_expand(tree[1])
-            macro_expand(tree[2])
+            macro_expand(tree[1], tree)
+            macro_expand(tree[2], tree)
         elif len(tree) == 2: # continue on exp1 only
-            macro_expand(tree[1])
+            macro_expand(tree[1], tree)
+
     elif tree[0] == 'macro':
         '''
         tree[1] = return register
@@ -205,20 +214,18 @@ def macro_expand(tree):
         
         reg_to_replace = exp_to_list(current_macro.reglist)
         macro_reg = exp_to_list(tree[3])
-
-        print('need to replace :', ident, 'macro with \n', current_macro.body)
         
         # replace register in macro def
         branch = copy.deepcopy(current_macro.body)
         replace_register(branch, reg_to_replace, macro_reg)
-        print('branch :\n', branch)
         
         # replace macro call branch by macro definition branch
         # branch :('exp', body  )
-        # tree = branch
-
+        print('\n', tree)
+        print('\n', branch)
+        parent[1] = branch
     
-
+    
 
 def exp_to_list(list):
     if list[1] == 'nil':
@@ -392,13 +399,17 @@ while True:
         break      # No more input
     print(tok)
 
-
+# parse the file
 parser = yacc.yacc(outputdir="outputs")
 
+# create the AST
 abstract_syntax_tree = parser.parse(testData)
-find_macro_def(abstract_syntax_tree)
-abstract_syntax_tree = macro_expand(abstract_syntax_tree)
 
+# handle macros
+find_macro_def(abstract_syntax_tree)
+macro_expand(abstract_syntax_tree, None)
+
+# evaluate the result
 eval(abstract_syntax_tree)
 
 # logging
