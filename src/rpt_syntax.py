@@ -2,6 +2,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+import copy
 
 # project's classes
 from Debug import Debug
@@ -197,36 +198,63 @@ def macro_expand(tree):
         tree[3] = reg list
         '''
         # find corresping macro def body within macros map
-        ident = find_macro(tree[2]).ID
+        ident = macros[tree[2]].ID
         for k,v in macros.items():
             if k == ident:
                 current_macro = v
         
-        print('need to replace :', ident, 'macro with :', current_macro.body)
         reg_to_replace = exp_to_list(current_macro.reglist)
         macro_reg = exp_to_list(tree[3])
-        print('reg_to_replace : ', reg_to_replace)
-        print('replace with   : ', macro_reg)
+
+        print('need to replace :', ident, 'macro with \n', current_macro.body)
         
         # replace register in macro def
-        tmp_body = replace_register(current_macro.body + list())
+        tmp_body = copy.deepcopy(current_macro.body)
+        replace_register(tmp_body, reg_to_replace, macro_reg)
+        print('tmp body :\n', tmp_body)
+        
         # replace macro call branch by macro definition branch
         # branch :('exp', body  )
         # tree = branch
 
     return tree
 
-def find_macro(ident):
-    return macros[ident]
 
 def exp_to_list(list):
     if list[1] == 'nil':
-        return [list[0]]
+        return [list[0]['val']]
     else:
-        return [list[0]] + exp_to_list(list[1])
+        return [list[0]["val"]] + exp_to_list(list[1])
 
-def replace_register(exp):
-    pass
+def replace_register(tree, old_reg, new_reg):
+    
+    if type(tree) is dict:
+        for i in range(len(old_reg)):
+            if tree['val'] == old_reg[i]:
+                tree['val'] = new_reg[i]
+
+    elif type(tree[0]) is dict:
+        for i in range(len(old_reg)):
+            if tree[0]['val'] == old_reg[i]:
+                tree[0]['val'] = new_reg[i]
+        replace_register(tree[1], old_reg, new_reg)
+    
+    elif tree[0] == 'nil' or tree[0] == 'end':
+        pass
+    elif tree[0] == 'exp':
+        replace_register(tree[1], old_reg, new_reg)
+    elif tree[0] == '<-' or tree[0] == 'repeat':
+        print()
+        replace_register(tree[1], old_reg, new_reg)
+        replace_register(tree[2], old_reg, new_reg)
+    elif tree[0] == 'inc':
+        replace_register(tree[1], old_reg, new_reg)
+    elif tree[0] == 'macro':
+        replace_register(tree[1], old_reg, new_reg)
+        replace_register(tree[3], old_reg, new_reg)
+    elif tree[0] == 'body':
+        replace_register(tree[1][0], old_reg, new_reg)
+    
 
 
 
@@ -334,6 +362,11 @@ def eval(exp):
         pass
 
 
+# ======================
+#    Program launch
+# ======================
+
+
 # file handling
 testFile = open(CURRENT_TEST, mode="r")
 testData = ""
@@ -374,12 +407,4 @@ if logger.debug:
     print('\n' + line + '\n        Parsed tree\n' + line)
     print(abstract_syntax_tree)
 
-
-# ('macro', {'type':'reg', 'val': 10}, 
-#           'times', 
-#           ({'type': 'reg', 'val': 3}, ({'type': 'reg', 'val': 4}, 'nil'))
-# )
-
-# ('exp', 
-#     ('repeat', {'val': 3, 'type': 'reg'}, ('body', (('repeat', {'val': 4, 'type':'reg'}, ('body', (('inc', {'val': 0, 'type': 'reg'}), 'nil'), 'end')), 'nil'), 'end')), 
-#     ('exp', ('<-', {'val': 10, 'type': 'reg'}, {'val': 0, 'type': 'reg'}))))))
+['body', [['repeat', {'type': 'reg', 'val': 1}, ['body', [['repeat',{'type': 'reg', 'val': 2}, ['body', [['inc', {'type': 'reg', 'val': 0}], 'nil'], 'end']],[['<-', {'type': 'reg', 'val': 1}, {'type': 'reg', 'val': 0}], 'nil']], 'end']], 'nil'], 'end']

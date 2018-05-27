@@ -2,7 +2,11 @@ MACRO times r1 r2
     repeat r1
         repeat r2
             inc r0
+            r1 <- r0
+            r1 <- r0
+            r1 <- r2
         end
+        r1 <- r0
     end
 end
 
