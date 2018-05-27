@@ -6,24 +6,25 @@ import sys
 # project's classes
 from Debug import Debug
 from Macro import Macro
-
+from Program import Program
 
 # general parameters
 INIT_VALUE = 0
 REGISTER_SIZE = 64
 TEST = 'programs/test.repeat'
 TIMES = 'programs/times.repeat'
-CURRENT_TEST = TEST
+MACROS_TEST = 'programs/macros.repeat' 
+CURRENT_TEST = MACROS_TEST
+line ="=========================="
 
 logger = Debug(True)
-
 
 # register and macro initialization 
 register = []
 for i in range(REGISTER_SIZE):
     register.append(INIT_VALUE)
 
-macro = {}
+macros= {}
 
 # =======================
 #    LEX tokenization
@@ -134,10 +135,10 @@ def p_innerbody(p):
     elif len(p) == 3: 
         p[0] = (p[1], p[2])
 
-# macros are placed within the tree
+# macros definitions are at first placed within the tree
 def p_mac(p):
     '''mac : REG MOVE ID reglist'''
-    p[0] = ('replace', p[1], p[3], p[4])
+    p[0] = ('macro', p[1], p[3], p[4])
     # p3 should be the macdef with good 
 
 def p_macdef(p):
@@ -147,10 +148,10 @@ def p_macdef(p):
 def p_reglist(p):
     '''reglist : REG 
                | REG reglist'''
-    if len(p) == 1:
-        p[0] = p[1]
-    else: 
-        p[0] = ('list', p[1], p[2])
+    if len(p) == 2:
+        p[0] = (p[1], 'nil')
+    elif len(p) == 3: 
+        p[0] = (p[1], p[2])
 
 
 # ========================
@@ -158,20 +159,49 @@ def p_reglist(p):
 # ========================
 
 # A first pass thru the AST where macro expressions branches are
-# replaced by their corresping macro definition tree.
+# replaced by their corresping macro definition tree. This is done
+# in two time : First we traverse the tree and find all macro definition
+# and add them to a python dict. Then, we traverse the Tree again to replace
+# each branch that is a macro call by the right macro Tree.
 
-def macro_reduce(exp):
-    if exp[0] == 'def':
+def find_macro_def(exp):
+    
+    if exp[0] == 'exp':
+        if len(exp) == 3: # continue on exp1 and exp2
+            find_macro_def(exp[1])
+            find_macro_def(exp[2])
+        elif len(exp) == 2: # continue on exp1 only
+            find_macro_def(exp[1])
+
+    elif exp[0] == 'def':
         '''
         exp[1] = ID
         exp[2] = reglist
         exp[3] = body
         '''
-        macro = Macro(exp[1], exp[2], exp[3])
-    elif lem(exp) > 1:
-        eval(exp[1])
+        m = Macro(exp[1], exp[2], exp[3])
+        macros[str(exp[1])] = m
 
+def macro_expand(tree):
+    
+    if tree[0] == 'exp':
+        if len(exp) == 3: # continue on exp1 and exp2
+            macro_expand(exp[1])
+            macro_expand(exp[2])
+        elif len(exp) == 2: # continue on exp1 only
+            macro_expand(exp[1])
+    elif tree[0] == 'macro':
+        '''
+        tree[1] = return register
+        tree[2] = macro id
+        tree[3] = reg list
+        '''
+        # find correspinf macro def body within macros map
 
+        # replace register in macro def
+
+        # replace macro call bracnh by macro definition branch 
+    return tree
 
 # ======================
 #    AST evaluation
@@ -182,11 +212,10 @@ def macro_reduce(exp):
 # is the next expression to evaluate. The function takes a regular Pyhton
 # tuples which is how the interpreter represent the AST with the first element
 # being an identifier for the node type, and all other elements are the
-# children of that node.
-
+# children of that node. Expressions nodes only have two childre but
+# other node types may have more.
 
 # specific actions fonctions
-
 def eval_exp(exp):
     """     
     exp[0] = first expression to evaluate
@@ -251,8 +280,6 @@ def eval_repeat(exp):
         eval_body(exp[1][1])
 
 
-# TODO: eval macros
-
 # main eval function
 def eval(exp):
     
@@ -278,13 +305,20 @@ def eval(exp):
     if exp[0] == 'end' or exp[0] == 'nil' or exp[0] == 'def':
         pass
 
-    
-    
+
 # file handling
 testFile = open(CURRENT_TEST, mode="r")
 testData = ""
-for line in testFile:
-    testData += line
+for l in testFile:
+    testData += l
+
+file_name = CURRENT_TEST[9:]
+
+if logger.debug:
+    print('\nrunning file : '+ file_name+'\n')
+
+if logger.debug:
+    print(line + '\n     Lex Tokens\n' + line + '\n')
 
 # Give the lexer some input
 lexer.input(testData)
@@ -296,17 +330,19 @@ while True:
         break      # No more input
     print(tok)
 
-file_name = CURRENT_TEST[9:]
-file_name = str(file_name[:-7])
-print(file_name)
+
 parser = yacc.yacc(outputdir="outputs")
 
 abstract_syntax_tree = parser.parse(testData)
+find_macro_def(abstract_syntax_tree)
+abstract_syntax_tree = macro_expand(abstract_syntax_tree)
 
-eval(abstract_syntax_tree)
+for key,val in macros.items():
+    print(key, "=>", val.body)
+
+# eval(abstract_syntax_tree)
 
 # logging
-line ="=========================="
 if logger.debug:
     print('\n' + line + '\n     register content\n' + line )
     print(register)
@@ -314,3 +350,7 @@ if logger.debug:
     print(abstract_syntax_tree)
 
 
+('macro', {'type':'reg', 'val': 10}, 
+          'times', 
+          ({'type': 'reg', 'val': 3}, ({'type': 'reg', 'val': 4}, 'nil'))
+)

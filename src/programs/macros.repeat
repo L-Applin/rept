@@ -1,0 +1,18 @@
+MACRO times r1 r2
+    repeat r1
+        repeat r2
+            inc r0
+        end
+    end
+end
+
+MACRO plus r1 r2
+    repeat r1
+        inc r0
+    end
+    repeat r2
+        inc r0
+    end
+end
+
+r10 <- times r3 r4

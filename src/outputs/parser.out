@@ -69,64 +69,21 @@ state 0
     (12) rpt -> . REPEAT REG body
     (16) mac -> . REG MOVE ID reglist
 
-    DEF             shift and go to state 8
-    INC             shift and go to state 4
-    REG             shift and go to state 12
-    REPEAT          shift and go to state 5
+    DEF             shift and go to state 5
+    INC             shift and go to state 6
+    REG             shift and go to state 2
+    REPEAT          shift and go to state 3
 
-    instr                          shift and go to state 9
-    mv                             shift and go to state 1
-    prog                           shift and go to state 2
-    cmd                            shift and go to state 3
-    mac                            shift and go to state 10
-    macdef                         shift and go to state 6
+    cmd                            shift and go to state 7
+    macdef                         shift and go to state 1
+    mac                            shift and go to state 9
+    prog                           shift and go to state 10
     incr                           shift and go to state 11
-    rpt                            shift and go to state 7
+    instr                          shift and go to state 4
+    rpt                            shift and go to state 12
+    mv                             shift and go to state 8
 
 state 1
-
-    (6) cmd -> mv .
-
-    INC             reduce using rule 6 (cmd -> mv .)
-    REG             reduce using rule 6 (cmd -> mv .)
-    REPEAT          reduce using rule 6 (cmd -> mv .)
-    END             reduce using rule 6 (cmd -> mv .)
-    DEF             reduce using rule 6 (cmd -> mv .)
-    $end            reduce using rule 6 (cmd -> mv .)
-
-
-state 2
-
-    (0) S' -> prog .
-
-
-
-state 3
-
-    (3) instr -> cmd .
-
-    DEF             reduce using rule 3 (instr -> cmd .)
-    INC             reduce using rule 3 (instr -> cmd .)
-    REG             reduce using rule 3 (instr -> cmd .)
-    REPEAT          reduce using rule 3 (instr -> cmd .)
-    $end            reduce using rule 3 (instr -> cmd .)
-
-
-state 4
-
-    (9) incr -> INC . REG
-
-    REG             shift and go to state 13
-
-
-state 5
-
-    (12) rpt -> REPEAT . REG body
-
-    REG             shift and go to state 14
-
-
-state 6
 
     (4) instr -> macdef .
 
@@ -137,26 +94,23 @@ state 6
     $end            reduce using rule 4 (instr -> macdef .)
 
 
-state 7
+state 2
 
-    (7) cmd -> rpt .
+    (10) mv -> REG . MOVE REG
+    (11) mv -> REG . MOVE INT
+    (16) mac -> REG . MOVE ID reglist
 
-    INC             reduce using rule 7 (cmd -> rpt .)
-    REG             reduce using rule 7 (cmd -> rpt .)
-    REPEAT          reduce using rule 7 (cmd -> rpt .)
-    END             reduce using rule 7 (cmd -> rpt .)
-    DEF             reduce using rule 7 (cmd -> rpt .)
-    $end            reduce using rule 7 (cmd -> rpt .)
+    MOVE            shift and go to state 13
 
 
-state 8
+state 3
 
-    (17) macdef -> DEF . ID reglist body
+    (12) rpt -> REPEAT . REG body
 
-    ID              shift and go to state 15
+    REG             shift and go to state 14
 
 
-state 9
+state 4
 
     (1) prog -> instr .
     (2) prog -> instr . prog
@@ -176,21 +130,58 @@ state 9
     (16) mac -> . REG MOVE ID reglist
 
     $end            reduce using rule 1 (prog -> instr .)
-    DEF             shift and go to state 8
-    INC             shift and go to state 4
-    REG             shift and go to state 12
-    REPEAT          shift and go to state 5
+    DEF             shift and go to state 5
+    INC             shift and go to state 6
+    REG             shift and go to state 2
+    REPEAT          shift and go to state 3
 
-    instr                          shift and go to state 9
-    mv                             shift and go to state 1
-    prog                           shift and go to state 16
-    cmd                            shift and go to state 3
-    mac                            shift and go to state 10
-    macdef                         shift and go to state 6
+    cmd                            shift and go to state 7
+    macdef                         shift and go to state 1
+    mac                            shift and go to state 9
+    prog                           shift and go to state 15
     incr                           shift and go to state 11
-    rpt                            shift and go to state 7
+    instr                          shift and go to state 4
+    rpt                            shift and go to state 12
+    mv                             shift and go to state 8
 
-state 10
+state 5
+
+    (17) macdef -> DEF . ID reglist body
+
+    ID              shift and go to state 16
+
+
+state 6
+
+    (9) incr -> INC . REG
+
+    REG             shift and go to state 17
+
+
+state 7
+
+    (3) instr -> cmd .
+
+    DEF             reduce using rule 3 (instr -> cmd .)
+    INC             reduce using rule 3 (instr -> cmd .)
+    REG             reduce using rule 3 (instr -> cmd .)
+    REPEAT          reduce using rule 3 (instr -> cmd .)
+    $end            reduce using rule 3 (instr -> cmd .)
+
+
+state 8
+
+    (6) cmd -> mv .
+
+    INC             reduce using rule 6 (cmd -> mv .)
+    REG             reduce using rule 6 (cmd -> mv .)
+    REPEAT          reduce using rule 6 (cmd -> mv .)
+    END             reduce using rule 6 (cmd -> mv .)
+    DEF             reduce using rule 6 (cmd -> mv .)
+    $end            reduce using rule 6 (cmd -> mv .)
+
+
+state 9
 
     (8) cmd -> mac .
 
@@ -200,6 +191,12 @@ state 10
     END             reduce using rule 8 (cmd -> mac .)
     DEF             reduce using rule 8 (cmd -> mac .)
     $end            reduce using rule 8 (cmd -> mac .)
+
+
+state 10
+
+    (0) S' -> prog .
+
 
 
 state 11
@@ -216,23 +213,25 @@ state 11
 
 state 12
 
-    (10) mv -> REG . MOVE REG
-    (11) mv -> REG . MOVE INT
-    (16) mac -> REG . MOVE ID reglist
+    (7) cmd -> rpt .
 
-    MOVE            shift and go to state 17
+    INC             reduce using rule 7 (cmd -> rpt .)
+    REG             reduce using rule 7 (cmd -> rpt .)
+    REPEAT          reduce using rule 7 (cmd -> rpt .)
+    END             reduce using rule 7 (cmd -> rpt .)
+    DEF             reduce using rule 7 (cmd -> rpt .)
+    $end            reduce using rule 7 (cmd -> rpt .)
 
 
 state 13
 
-    (9) incr -> INC REG .
+    (10) mv -> REG MOVE . REG
+    (11) mv -> REG MOVE . INT
+    (16) mac -> REG MOVE . ID reglist
 
-    DEF             reduce using rule 9 (incr -> INC REG .)
-    INC             reduce using rule 9 (incr -> INC REG .)
-    REG             reduce using rule 9 (incr -> INC REG .)
-    REPEAT          reduce using rule 9 (incr -> INC REG .)
-    $end            reduce using rule 9 (incr -> INC REG .)
-    END             reduce using rule 9 (incr -> INC REG .)
+    REG             shift and go to state 20
+    INT             shift and go to state 18
+    ID              shift and go to state 19
 
 
 state 14
@@ -251,47 +250,82 @@ state 14
     (12) rpt -> . REPEAT REG body
     (16) mac -> . REG MOVE ID reglist
 
-    INC             shift and go to state 4
-    REG             shift and go to state 12
-    REPEAT          shift and go to state 5
+    INC             shift and go to state 6
+    REG             shift and go to state 2
+    REPEAT          shift and go to state 3
 
-    body                           shift and go to state 19
-    mv                             shift and go to state 1
-    cmd                            shift and go to state 18
-    innerbody                      shift and go to state 20
-    mac                            shift and go to state 10
+    cmd                            shift and go to state 21
+    mv                             shift and go to state 8
+    mac                            shift and go to state 9
     incr                           shift and go to state 11
-    rpt                            shift and go to state 7
+    innerbody                      shift and go to state 22
+    rpt                            shift and go to state 12
+    body                           shift and go to state 23
 
 state 15
-
-    (17) macdef -> DEF ID . reglist body
-    (18) reglist -> . REG
-    (19) reglist -> . REG reglist
-
-    REG             shift and go to state 22
-
-    reglist                        shift and go to state 21
-
-state 16
 
     (2) prog -> instr prog .
 
     $end            reduce using rule 2 (prog -> instr prog .)
 
 
-state 17
+state 16
 
-    (10) mv -> REG MOVE . REG
-    (11) mv -> REG MOVE . INT
-    (16) mac -> REG MOVE . ID reglist
+    (17) macdef -> DEF ID . reglist body
+    (18) reglist -> . REG
+    (19) reglist -> . REG reglist
 
     REG             shift and go to state 25
-    INT             shift and go to state 24
-    ID              shift and go to state 23
+
+    reglist                        shift and go to state 24
+
+state 17
+
+    (9) incr -> INC REG .
+
+    DEF             reduce using rule 9 (incr -> INC REG .)
+    INC             reduce using rule 9 (incr -> INC REG .)
+    REG             reduce using rule 9 (incr -> INC REG .)
+    REPEAT          reduce using rule 9 (incr -> INC REG .)
+    $end            reduce using rule 9 (incr -> INC REG .)
+    END             reduce using rule 9 (incr -> INC REG .)
 
 
 state 18
+
+    (11) mv -> REG MOVE INT .
+
+    INC             reduce using rule 11 (mv -> REG MOVE INT .)
+    REG             reduce using rule 11 (mv -> REG MOVE INT .)
+    REPEAT          reduce using rule 11 (mv -> REG MOVE INT .)
+    END             reduce using rule 11 (mv -> REG MOVE INT .)
+    DEF             reduce using rule 11 (mv -> REG MOVE INT .)
+    $end            reduce using rule 11 (mv -> REG MOVE INT .)
+
+
+state 19
+
+    (16) mac -> REG MOVE ID . reglist
+    (18) reglist -> . REG
+    (19) reglist -> . REG reglist
+
+    REG             shift and go to state 25
+
+    reglist                        shift and go to state 26
+
+state 20
+
+    (10) mv -> REG MOVE REG .
+
+    INC             reduce using rule 10 (mv -> REG MOVE REG .)
+    REG             reduce using rule 10 (mv -> REG MOVE REG .)
+    REPEAT          reduce using rule 10 (mv -> REG MOVE REG .)
+    END             reduce using rule 10 (mv -> REG MOVE REG .)
+    DEF             reduce using rule 10 (mv -> REG MOVE REG .)
+    $end            reduce using rule 10 (mv -> REG MOVE REG .)
+
+
+state 21
 
     (14) innerbody -> cmd .
     (15) innerbody -> cmd . innerbody
@@ -308,18 +342,25 @@ state 18
     (16) mac -> . REG MOVE ID reglist
 
     END             reduce using rule 14 (innerbody -> cmd .)
-    INC             shift and go to state 4
-    REG             shift and go to state 12
-    REPEAT          shift and go to state 5
+    INC             shift and go to state 6
+    REG             shift and go to state 2
+    REPEAT          shift and go to state 3
 
-    mv                             shift and go to state 1
-    cmd                            shift and go to state 18
-    innerbody                      shift and go to state 26
-    mac                            shift and go to state 10
+    cmd                            shift and go to state 21
+    mv                             shift and go to state 8
+    mac                            shift and go to state 9
     incr                           shift and go to state 11
-    rpt                            shift and go to state 7
+    innerbody                      shift and go to state 27
+    rpt                            shift and go to state 12
 
-state 19
+state 22
+
+    (13) body -> innerbody . END
+
+    END             shift and go to state 28
+
+
+state 23
 
     (12) rpt -> REPEAT REG body .
 
@@ -331,14 +372,7 @@ state 19
     $end            reduce using rule 12 (rpt -> REPEAT REG body .)
 
 
-state 20
-
-    (13) body -> innerbody . END
-
-    END             shift and go to state 27
-
-
-state 21
+state 24
 
     (17) macdef -> DEF ID reglist . body
     (13) body -> . innerbody END
@@ -354,19 +388,19 @@ state 21
     (12) rpt -> . REPEAT REG body
     (16) mac -> . REG MOVE ID reglist
 
-    INC             shift and go to state 4
-    REG             shift and go to state 12
-    REPEAT          shift and go to state 5
+    INC             shift and go to state 6
+    REG             shift and go to state 2
+    REPEAT          shift and go to state 3
 
-    body                           shift and go to state 28
-    innerbody                      shift and go to state 20
-    cmd                            shift and go to state 18
-    mac                            shift and go to state 10
-    mv                             shift and go to state 1
+    cmd                            shift and go to state 21
     incr                           shift and go to state 11
-    rpt                            shift and go to state 7
+    mac                            shift and go to state 9
+    innerbody                      shift and go to state 22
+    rpt                            shift and go to state 12
+    body                           shift and go to state 29
+    mv                             shift and go to state 8
 
-state 22
+state 25
 
     (18) reglist -> REG .
     (19) reglist -> REG . reglist
@@ -374,59 +408,37 @@ state 22
     (19) reglist -> . REG reglist
 
   ! shift/reduce conflict for REG resolved as shift
+    DEF             reduce using rule 18 (reglist -> REG .)
     INC             reduce using rule 18 (reglist -> REG .)
     REPEAT          reduce using rule 18 (reglist -> REG .)
-    DEF             reduce using rule 18 (reglist -> REG .)
     $end            reduce using rule 18 (reglist -> REG .)
     END             reduce using rule 18 (reglist -> REG .)
-    REG             shift and go to state 22
+    REG             shift and go to state 25
 
   ! REG             [ reduce using rule 18 (reglist -> REG .) ]
 
-    reglist                        shift and go to state 29
-
-state 23
-
-    (16) mac -> REG MOVE ID . reglist
-    (18) reglist -> . REG
-    (19) reglist -> . REG reglist
-
-    REG             shift and go to state 22
-
     reglist                        shift and go to state 30
 
-state 24
-
-    (11) mv -> REG MOVE INT .
-
-    DEF             reduce using rule 11 (mv -> REG MOVE INT .)
-    INC             reduce using rule 11 (mv -> REG MOVE INT .)
-    REG             reduce using rule 11 (mv -> REG MOVE INT .)
-    REPEAT          reduce using rule 11 (mv -> REG MOVE INT .)
-    $end            reduce using rule 11 (mv -> REG MOVE INT .)
-    END             reduce using rule 11 (mv -> REG MOVE INT .)
-
-
-state 25
-
-    (10) mv -> REG MOVE REG .
-
-    DEF             reduce using rule 10 (mv -> REG MOVE REG .)
-    INC             reduce using rule 10 (mv -> REG MOVE REG .)
-    REG             reduce using rule 10 (mv -> REG MOVE REG .)
-    REPEAT          reduce using rule 10 (mv -> REG MOVE REG .)
-    $end            reduce using rule 10 (mv -> REG MOVE REG .)
-    END             reduce using rule 10 (mv -> REG MOVE REG .)
-
-
 state 26
+
+    (16) mac -> REG MOVE ID reglist .
+
+    DEF             reduce using rule 16 (mac -> REG MOVE ID reglist .)
+    INC             reduce using rule 16 (mac -> REG MOVE ID reglist .)
+    REG             reduce using rule 16 (mac -> REG MOVE ID reglist .)
+    REPEAT          reduce using rule 16 (mac -> REG MOVE ID reglist .)
+    $end            reduce using rule 16 (mac -> REG MOVE ID reglist .)
+    END             reduce using rule 16 (mac -> REG MOVE ID reglist .)
+
+
+state 27
 
     (15) innerbody -> cmd innerbody .
 
     END             reduce using rule 15 (innerbody -> cmd innerbody .)
 
 
-state 27
+state 28
 
     (13) body -> innerbody END .
 
@@ -438,7 +450,7 @@ state 27
     END             reduce using rule 13 (body -> innerbody END .)
 
 
-state 28
+state 29
 
     (17) macdef -> DEF ID reglist body .
 
@@ -449,30 +461,18 @@ state 28
     $end            reduce using rule 17 (macdef -> DEF ID reglist body .)
 
 
-state 29
+state 30
 
     (19) reglist -> REG reglist .
 
+    DEF             reduce using rule 19 (reglist -> REG reglist .)
     INC             reduce using rule 19 (reglist -> REG reglist .)
     REG             reduce using rule 19 (reglist -> REG reglist .)
     REPEAT          reduce using rule 19 (reglist -> REG reglist .)
-    DEF             reduce using rule 19 (reglist -> REG reglist .)
     $end            reduce using rule 19 (reglist -> REG reglist .)
     END             reduce using rule 19 (reglist -> REG reglist .)
-
-
-state 30
-
-    (16) mac -> REG MOVE ID reglist .
-
-    INC             reduce using rule 16 (mac -> REG MOVE ID reglist .)
-    REG             reduce using rule 16 (mac -> REG MOVE ID reglist .)
-    REPEAT          reduce using rule 16 (mac -> REG MOVE ID reglist .)
-    END             reduce using rule 16 (mac -> REG MOVE ID reglist .)
-    DEF             reduce using rule 16 (mac -> REG MOVE ID reglist .)
-    $end            reduce using rule 16 (mac -> REG MOVE ID reglist .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for REG in state 22 resolved as shift
+WARNING: shift/reduce conflict for REG in state 25 resolved as shift
