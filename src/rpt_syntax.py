@@ -94,9 +94,9 @@ def p_prog(p):
     '''prog : instr 
             | instr prog'''
     if len(p) == 3:
-        p[0] = ('exp', p[1], p[2]) 
+        p[0] = [ 'exp', p[1], p[2] ]
     else:
-        p[0] = ('exp', p[1])
+        p[0] = [ 'exp', p[1] ]
 
 def p_instr(p):
     '''instr : cmd 
@@ -112,46 +112,46 @@ def p_cmd(p):
 
 def p_incr(p):
     '''incr : INC REG'''
-    p[0] = (p[1], p[2])
+    p[0] = [ p[1], p[2] ]
 
 def p_mv(p):
     '''mv : REG MOVE REG 
           | REG MOVE INT'''
-    p[0] = (p[2], p[1], p[3])
+    p[0] = [ p[2], p[1], p[3] ]
 
 def p_rpt(p):
     '''rpt : REPEAT REG body'''
-    p[0] = ('repeat', p[2], p[3])
+    p[0] = [ 'repeat', p[2], p[3] ]
 
 def p_body(p):
     '''body : innerbody END'''
-    p[0] =('body', p[1], p[2])
+    p[0] =[ 'body', p[1], p[2] ]
 
 def p_innerbody(p):
     '''innerbody : cmd 
                  | cmd innerbody'''
     if len(p) == 2:
-        p[0] = (p[1], 'nil')
+        p[0] = [ p[1], 'nil' ]
     elif len(p) == 3: 
-        p[0] = (p[1], p[2])
+        p[0] = [ p[1], p[2] ]
 
 # macros definitions are at first placed within the tree
 def p_mac(p):
     '''mac : REG MOVE ID reglist'''
-    p[0] = ('macro', p[1], p[3], p[4])
+    p[0] = [ 'macro', p[1], p[3], p[4] ]
     # p3 should be the macdef with good 
 
 def p_macdef(p):
     '''macdef : DEF ID reglist body'''
-    p[0] = ("def", p[2], p[3], p[4])
+    p[0] = [ "def", p[2], p[3], p[4] ]
 
 def p_reglist(p):
     '''reglist : REG 
                | REG reglist'''
     if len(p) == 2:
-        p[0] = (p[1], 'nil')
+        p[0] = [ p[1], 'nil']
     elif len(p) == 3: 
-        p[0] = (p[1], p[2])
+        p[0] = [ p[1], p[2] ]
 
 
 # ========================
@@ -200,15 +200,19 @@ def macro_expand(tree):
         ident = find_macro(tree[2]).ID
         for k,v in macros.items():
             if k == ident:
-                macro_body = v.body
+                current_macro = v
         
-        print('need to replace :', ident, macro_body)
-
+        print('need to replace :', ident, 'macro with :', current_macro.body)
+        reg_to_replace = exp_to_list(current_macro.reglist)
+        macro_reg = exp_to_list(tree[3])
+        print('reg_to_replace : ', reg_to_replace)
+        print('replace with   : ', macro_reg)
+        
         # replace register in macro def
-
+        tmp_body = replace_register(current_macro.body + list())
         # replace macro call branch by macro definition branch
         # branch :('exp', body  )
-        tree = branch
+        # tree = branch
 
     return tree
 
@@ -216,7 +220,14 @@ def find_macro(ident):
     return macros[ident]
 
 def exp_to_list(list):
+    if list[1] == 'nil':
+        return [list[0]]
+    else:
+        return [list[0]] + exp_to_list(list[1])
+
+def replace_register(exp):
     pass
+
 
 
 
@@ -364,11 +375,11 @@ if logger.debug:
     print(abstract_syntax_tree)
 
 
-('macro', {'type':'reg', 'val': 10}, 
-          'times', 
-          ({'type': 'reg', 'val': 3}, ({'type': 'reg', 'val': 4}, 'nil'))
-)
+# ('macro', {'type':'reg', 'val': 10}, 
+#           'times', 
+#           ({'type': 'reg', 'val': 3}, ({'type': 'reg', 'val': 4}, 'nil'))
+# )
 
-('exp', 
-    ('repeat', {'val': 3, 'type': 'reg'}, ('body', (('repeat', {'val': 4, 'type':'reg'}, ('body', (('inc', {'val': 0, 'type': 'reg'}), 'nil'), 'end')), 'nil'), 'end')), 
-    ('exp', ('<-', {'val': 10, 'type': 'reg'}, {'val': 0, 'type': 'reg'}))))))
+# ('exp', 
+#     ('repeat', {'val': 3, 'type': 'reg'}, ('body', (('repeat', {'val': 4, 'type':'reg'}, ('body', (('inc', {'val': 0, 'type': 'reg'}), 'nil'), 'end')), 'nil'), 'end')), 
+#     ('exp', ('<-', {'val': 10, 'type': 'reg'}, {'val': 0, 'type': 'reg'}))))))
