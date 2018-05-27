@@ -16,3 +16,10 @@ MACRO plus r1 r2
 end
 
 r10 <- times r3 r4
+
+repeat r3
+    repeat r4
+        inc r0
+    end
+end
+r10 <- r0

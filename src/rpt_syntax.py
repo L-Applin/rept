@@ -160,9 +160,9 @@ def p_reglist(p):
 
 # A first pass thru the AST where macro expressions branches are
 # replaced by their corresping macro definition tree. This is done
-# in two time : First we traverse the tree and find all macro definition
-# and add them to a python dict. Then, we traverse the Tree again to replace
-# each branch that is a macro call by the right macro Tree.
+# in two time : First we traverse the tree to find all macro definition
+# and add them to the python "macros" dict. Then, we traverse the Tree again 
+# to replace each branch that is a macro call by the right macro definition Tree.
 
 def find_macro_def(exp):
     
@@ -185,29 +185,46 @@ def find_macro_def(exp):
 def macro_expand(tree):
     
     if tree[0] == 'exp':
-        if len(exp) == 3: # continue on exp1 and exp2
-            macro_expand(exp[1])
-            macro_expand(exp[2])
-        elif len(exp) == 2: # continue on exp1 only
-            macro_expand(exp[1])
+        if len(tree) == 3: # continue on exp1 and exp2
+            macro_expand(tree[1])
+            macro_expand(tree[2])
+        elif len(tree) == 2: # continue on exp1 only
+            macro_expand(tree[1])
     elif tree[0] == 'macro':
         '''
         tree[1] = return register
         tree[2] = macro id
         tree[3] = reg list
         '''
-        # find correspinf macro def body within macros map
+        # find corresping macro def body within macros map
+        ident = find_macro(tree[2]).ID
+        for k,v in macros.items():
+            if k == ident:
+                macro_body = v.body
+        
+        print('need to replace :', ident, macro_body)
 
         # replace register in macro def
 
-        # replace macro call bracnh by macro definition branch 
+        # replace macro call branch by macro definition branch
+        # branch :('exp', body  )
+        tree = branch
+
     return tree
+
+def find_macro(ident):
+    return macros[ident]
+
+def exp_to_list(list):
+    pass
+
+
 
 # ======================
 #    AST evaluation
 # ======================
 
-# The syntax tree is represented as a list of expression where 
+# The syntax tree is represented as a list of expressions where 
 # the left branch is the expression to evaluate and the right brand 
 # is the next expression to evaluate. The function takes a regular Pyhton
 # tuples which is how the interpreter represent the AST with the first element
@@ -337,9 +354,6 @@ abstract_syntax_tree = parser.parse(testData)
 find_macro_def(abstract_syntax_tree)
 abstract_syntax_tree = macro_expand(abstract_syntax_tree)
 
-for key,val in macros.items():
-    print(key, "=>", val.body)
-
 # eval(abstract_syntax_tree)
 
 # logging
@@ -354,3 +368,7 @@ if logger.debug:
           'times', 
           ({'type': 'reg', 'val': 3}, ({'type': 'reg', 'val': 4}, 'nil'))
 )
+
+('exp', 
+    ('repeat', {'val': 3, 'type': 'reg'}, ('body', (('repeat', {'val': 4, 'type':'reg'}, ('body', (('inc', {'val': 0, 'type': 'reg'}), 'nil'), 'end')), 'nil'), 'end')), 
+    ('exp', ('<-', {'val': 10, 'type': 'reg'}, {'val': 0, 'type': 'reg'}))))))
