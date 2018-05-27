@@ -1,12 +1,12 @@
 
-GRAMMAR                                                     ACTION
+GRAMMAR                                                     ACTION - DESCRIPTION
 -----------------------------------------------------       -----------------------------------------------------
-<prog>          ::=     <instr> | <instr> <prog>            none           
-<instr>         ::=     <cmd> | <macdef>                    none          
+<prog>          ::=     <exp> | <exp> <prog>                none           
+<exp>           ::=     <cmd> | <macdef>                    none - An expression is either a command for the program or a macro definition        
 <cmd>           ::=     <incr>                              none
                         | <mv>                         
                         | <rpt> 
-                        | <mac>              
+                        | <mac>                             macro "call" : needs to be replace by the macro body
 
 <incr>          ::=     INC REG                             reg[<register>] = reg[<register>] + 1
 <mv>            ::=     REG MOVE (REG | INT)                reg[<register1>] = reg[<register2>]

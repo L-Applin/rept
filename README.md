@@ -8,7 +8,7 @@ Note : this is a personal project that I'm doing for fun and learning. Don't exp
 [Introduction à l'informatique théorique][info theo] (Introduction to Theoretical computer science) at [University of Montreal][udem]. As a challenge I decided I would try to implement an interpreter of the langage by myself using Python.
 
 ### The langage
-*Repeat* is a very simple, very contrived and very limited "programming langage". I made some very slight modification to the syntax Mr Tapp used in his class but everything else is exactly the same. First, the langage has an infinit amount of registers that it canuse to store an integer, as large as needed. Second, it has a few operations that can be made on those register : 
+*Repeat* is a very simple, very contrived and very limited "programming langage". I made some very slight modification to the syntax Mr Tapp used in his class but everything else is exactly the same. First, the langage has an infinite amount of registers that it can use to store an integer (the integer can be as large as it needs). Second, it has a few operations that can be made on those register : 
 
 1. Increment the value stored in a register : `inc r0`
 2. Move the value from one register to another : `r1 <- r2`. It is also possible to directly put a value inside a register : `r0 <- 1024`
@@ -29,34 +29,27 @@ That's it.
 ### Grammar
 Here is the grammar I came up with for the *Repeat* langage
 
-```
-GRAMMAR                                            ACTION
----------------------------------------------      -------------------------------------------
-<prog>      ::=    <instr> | <instr> <prog>        none           
-<instr>     ::=    <cmd> | <mac>                   none          
-<cmd>       ::=    <incr>                          none
-                    | <mv>                         
-                    | <rpt> 
-                    | <mac>              
+``` grammar
+GRAMMAR                                            ACTIONS & INFO
+---------------------------------------------      ------------------------------------------------------
+<prog>      ::=    <expr> | <expr> <prog>          A program is a list of expressions
+<expr>     ::=     <cmd> | <mac>                   An expr is either a command or a macro definition
+<cmd>       ::=    <incr>                          There are four different types of commands
+                    | <mv>
+                    | <rpt>
+                    | <mac>
 
-<incr>      ::=    INC REG                         reg[<register>] = reg[<register>] + 1
-<mv>        ::=    REG MOVE (REG | INT)            reg[<register1>] = reg[<register2>]
-<rpt>       ::=    REPEAT REG <body>               repeats all commands in body <register> amount of time
+<incr>      ::=    INC REG                         reg[REG.val] = reg[REG.val] + 1
+<mv>        ::=    REG MOVE (REG | INT)            reg[REG<1>.val] = reg[REG<2>.val]
+<rpt>       ::=    REPEAT REG <body>               repeats all commands in body for REG.val times
 
-<body>      ::=    <innerbody> END                 none        
-<innerbody> ::=    <cmd> | <cmd> <innerbody>       none      
+<body>      ::=    <innerbody> END                 
+<innerbody> ::=    <cmd> | <cmd> <innerbody>       
 
 <mac>       ::=    REG MOVE ID <reglist>           execute all commands within matchin f macro definition
 <macdef>    ::=    DEF ID <reglist> <body>         define all actions to be done upon calling macro
-<reglist>   ::=    REG | REG <reglist>             none
+<reglist>   ::=    REG | REG <reglist>             
 
-
-tokens : 
-    REG   : r\d+
-    MOVE  : <- 
-    INC   : inc rn
-    INT   : \d+
-    ID    : ([_a-zA-Z])([_a-zA-Z0-9]+)
 ```
 
 ### Parsing
