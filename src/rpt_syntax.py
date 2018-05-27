@@ -209,15 +209,15 @@ def macro_expand(tree):
         print('need to replace :', ident, 'macro with \n', current_macro.body)
         
         # replace register in macro def
-        tmp_body = copy.deepcopy(current_macro.body)
-        replace_register(tmp_body, reg_to_replace, macro_reg)
-        print('tmp body :\n', tmp_body)
+        branch = copy.deepcopy(current_macro.body)
+        replace_register(branch, reg_to_replace, macro_reg)
+        print('branch :\n', branch)
         
         # replace macro call branch by macro definition branch
         # branch :('exp', body  )
         # tree = branch
 
-    return tree
+    
 
 
 def exp_to_list(list):
@@ -239,12 +239,11 @@ def replace_register(tree, old_reg, new_reg):
                 tree[0]['val'] = new_reg[i]
         replace_register(tree[1], old_reg, new_reg)
     
-    elif tree[0] == 'nil' or tree[0] == 'end':
+    elif tree == 'nil' or tree == 'end':
         pass
     elif tree[0] == 'exp':
         replace_register(tree[1], old_reg, new_reg)
     elif tree[0] == '<-' or tree[0] == 'repeat':
-        print()
         replace_register(tree[1], old_reg, new_reg)
         replace_register(tree[2], old_reg, new_reg)
     elif tree[0] == 'inc':
@@ -253,10 +252,12 @@ def replace_register(tree, old_reg, new_reg):
         replace_register(tree[1], old_reg, new_reg)
         replace_register(tree[3], old_reg, new_reg)
     elif tree[0] == 'body':
-        replace_register(tree[1][0], old_reg, new_reg)
-    
+        replace_register(tree[1], old_reg, new_reg)
+    else:
+        replace_register(tree[0], old_reg, new_reg)
+        replace_register(tree[1], old_reg, new_reg)
 
-
+        
 
 
 # ======================
@@ -398,7 +399,7 @@ abstract_syntax_tree = parser.parse(testData)
 find_macro_def(abstract_syntax_tree)
 abstract_syntax_tree = macro_expand(abstract_syntax_tree)
 
-# eval(abstract_syntax_tree)
+eval(abstract_syntax_tree)
 
 # logging
 if logger.debug:
@@ -407,4 +408,3 @@ if logger.debug:
     print('\n' + line + '\n        Parsed tree\n' + line)
     print(abstract_syntax_tree)
 
-['body', [['repeat', {'type': 'reg', 'val': 1}, ['body', [['repeat',{'type': 'reg', 'val': 2}, ['body', [['inc', {'type': 'reg', 'val': 0}], 'nil'], 'end']],[['<-', {'type': 'reg', 'val': 1}, {'type': 'reg', 'val': 0}], 'nil']], 'end']], 'nil'], 'end']

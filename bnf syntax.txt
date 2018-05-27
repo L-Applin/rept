@@ -21,12 +21,14 @@ GRAMMAR                                                     ACTION - DESCRIPTION
 
 
 tokens : 
-    REG : r\d+
-    MOVE : <- 
-    INC : inc rn
-    INT : \d+
-    ID : ([_a-zA-Z])([_a-zA-Z0-9]+)
-
+    REG     : r\d+
+    MOVE    : <- 
+    INC     : inc
+    INT     : \d+
+    ID      : ([_a-zA-Z])([_a-zA-Z0-9]+)
+    REPEAT  : repeat
+    DEF     : MACRO
+    
 syntaxe exemple :
 
 inc r1

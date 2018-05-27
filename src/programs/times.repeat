@@ -1,7 +1,7 @@
 # TIMES (r1, r2)
 # 8 * 4
 
-DEFINE-MACRO times r1 r2
+MACRO times r1 r2
     r1 <- 8
     r2 <- 4
     repeat r1
