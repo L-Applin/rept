@@ -220,13 +220,13 @@ def macro_expand(tree, parent):
         replace_register(branch, reg_to_replace, macro_reg)
         
         # replace macro call branch by macro definition branch
-        # branch :('exp', body  )
-        print('\n', tree)
-        print('\n', branch)
+        # first, add the "return" register command to the new branch
+        reg = {'type':'reg', 'val':0}
+        move = ['<-', tree[1], reg]
+        branch = ['exp', branch, move]
         parent[1] = branch
     
     
-
 def exp_to_list(list):
     if list[1] == 'nil':
         return [list[0]['val']]
