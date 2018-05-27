@@ -5,7 +5,7 @@ Note : this is a personal project that I'm doing for fun and learning. Don't exp
 ## Description
 
 *Repeat* is a pseudo-programing languge invented by [Alain Tapp][alain tapp] for our 
-[Introduction à l'informatique théorique][info theo] (Introduction to Theoretical computer science) at [University of Montreal][udem]. As a challenge I decided I would try to implement an interpreter of the langage by myself using Python.
+[Introduction à l'informatique théorique][info theo] (Introduction to Theoretical computer science) at [University of Montreal][udem]. As a challenge I decided I would try to implement an interpreter of the langage using Python.
 
 ### The langage
 *Repeat* is a very simple, very contrived and very limited "programming langage". I made some very slight modification to the syntax Mr Tapp used in his class but everything else is exactly the same. First, the langage has an infinite amount of registers that it can use to store an integer (the integer can be as large as it needs). Second, it has a few operations that can be made on those register : 
