@@ -26,6 +26,4 @@ r2 <- 2
 r3 <- 3
 r4 <- 4
 
-r5 <- plus (r1 r2)
-r6 <- plus (r3 r4)
-r7 <- times (r5 r6)
+r8 <- plustimes(r1 r2 r3 r4)

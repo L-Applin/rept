@@ -190,9 +190,11 @@ def find_macro_def(exp):
 
 def macro_expand(tree, parent):
 
-    print(tree[0])
+    #print(tree)
 
-    if tree[0] == 'end' or tree[0] == 'nil' or tree[0] == 'def' or tree[0] == '<-' or tree[0] == 'inc':
+    if tree == 'end' or tree == 'nil' or tree == 'def' or tree == '<-' or tree == 'inc':
+        pass
+    elif tree[0] == 'end' or tree[0] == 'nil' or tree[0] == 'def' or tree[0] == '<-' or tree[0] == 'inc':
         pass
     elif tree[0] == 'exp':
         if len(tree) == 3: # continue on exp1 and exp2
@@ -203,7 +205,7 @@ def macro_expand(tree, parent):
     elif tree[0] == 'repeat':
         macro_expand(tree[2], tree)
     elif tree[0] =='body':
-        print(tree[1])
+        #print('body : ',tree[1])
         macro_expand(tree[1], tree)
     elif tree[0] == 'macro':
         '''
@@ -223,7 +225,10 @@ def macro_expand(tree, parent):
         # replace register in macro def
         branch = copy.deepcopy(current_macro.body)
         replace_register(branch, reg_to_replace, macro_reg)
-        
+        print('TRYING TO EXPAND :', tree[2], branch)
+        macro_expand(branch, None)
+        print('AFTER EXPANSION :', tree[2] , branch)
+        # print('prarent :', parent)
         # replace macro call branch by macro definition branch
         # first, add the "return" register command to the new branch
         reg = {'type':'reg', 'val':0}
@@ -232,8 +237,8 @@ def macro_expand(tree, parent):
         branch = ['exp', branch, ['exp', move, reset]]
         parent[1] = branch
     elif len(tree) == 2:
-        print(tree[0])
-        print(tree[1])
+        # print(tree[0])
+        # print(tree[1])
         macro_expand(tree[0], parent)
         macro_expand(tree[1], parent)
     
@@ -426,6 +431,6 @@ eval(abstract_syntax_tree)
 if logger.debug:
     print('\n' + line + '\n     register content\n' + line )
     print(register)
-    print('\n' + line + '\n        Parsed tree\n' + line)
+    print('\n' + line + '\n     Final parsed tree\n' + line)
     print(abstract_syntax_tree)
 
