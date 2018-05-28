@@ -18,8 +18,8 @@ end
 MACRO plustimes (r1 r2 r3 r4)
     r5 <- plus (r1 r2)
     r6 <- plus (r3 r4)
-    r0 <- times (r5 r6)
-    end
+    r7 <- times (r5 r6)
+end
 
 r1 <- 1
 r2 <- 2

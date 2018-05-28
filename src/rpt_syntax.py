@@ -15,7 +15,7 @@ REGISTER_SIZE = 64
 TEST = 'programs/test.repeat'
 TIMES = 'programs/times.repeat'
 MACROS_TEST = 'programs/macros.repeat' 
-CURRENT_TEST = MACROS_TEST
+CURRENT_TEST = TEST
 line ="=========================="
 
 logger = Debug(True)
@@ -190,20 +190,22 @@ def find_macro_def(exp):
 
 def macro_expand(tree, parent):
 
-    done = False
-    
-    if tree[0] == 'exp':
+    print(tree[0])
+
+    if tree[0] == 'end' or tree[0] == 'nil' or tree[0] == 'def' or tree[0] == '<-' or tree[0] == 'inc':
+        pass
+    elif tree[0] == 'exp':
         if len(tree) == 3: # continue on exp1 and exp2
             macro_expand(tree[1], tree)
             macro_expand(tree[2], tree)
         elif len(tree) == 2: # continue on exp1 only
             macro_expand(tree[1], tree)
-
-    elif tree[0] == 'def':
-        parent[1] == 'nil'
-        print('REMOVING FROM TREE')
-
-    if tree[0] == 'macro':
+    elif tree[0] == 'repeat':
+        macro_expand(tree[2], tree)
+    elif tree[0] =='body':
+        print(tree[1])
+        macro_expand(tree[1], tree)
+    elif tree[0] == 'macro':
         '''
         tree[1] = return register
         tree[2] = macro id
@@ -229,10 +231,11 @@ def macro_expand(tree, parent):
         reset = ['<-', {'type':'reg', 'val':0} , {'type':'num', 'val':0}]
         branch = ['exp', branch, ['exp', move, reset]]
         parent[1] = branch
-    else:
-        done = True
-
-    return done    
+    elif len(tree) == 2:
+        print(tree[0])
+        print(tree[1])
+        macro_expand(tree[0], parent)
+        macro_expand(tree[1], parent)
     
     
 def exp_to_list(list):
@@ -414,9 +417,7 @@ abstract_syntax_tree = parser.parse(testData)
 
 # handle macros
 find_macro_def(abstract_syntax_tree)
-done = False
-while not done:
-    done = macro_expand(abstract_syntax_tree, None)
+macro_expand(abstract_syntax_tree, None)
 
 # evaluate the result
 eval(abstract_syntax_tree)

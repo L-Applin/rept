@@ -1,31 +1,17 @@
-inc r0
-r1 < r0
-inc r1
-r10 <- r1
-r63 <- 100
-r3 <- 8
-r4 <- 20
-
-repeat r3
-
-  inc r7
-  inc r8
-
-  repeat r4
-
-    inc r63
-    inc r62
-
-  end
-
-  r9 <- r60
-
+MACRO times (r1 r2)
+    repeat r1
+        repeat r2
+            inc r0
+        end
+    end
 end
 
-repeat r4 
-  inc r0 
-  inc r1
-  inc r50
-  inc r61
+r1 <- 10
+r2 <- 4
+r3 <- 6
+
+r0 <- 0
+repeat r1 
+  r4 <- times (r2 r3)
+  r2 <- r4
 end
-r60 <- r61

@@ -7,7 +7,3 @@ class Macro:
         self.ID = ident
         self.reglist = reglist
         self.body = body
-
-
-
-
