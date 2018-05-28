@@ -85,7 +85,7 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-# Build the lexer
+# Build the lexerpip3 install PyLint
 lexer = lex.lex()
 
 
@@ -225,9 +225,7 @@ def macro_expand(tree, parent):
         # replace register in macro def
         branch = copy.deepcopy(current_macro.body)
         replace_register(branch, reg_to_replace, macro_reg)
-        print('TRYING TO EXPAND :', tree[2], branch)
         macro_expand(branch, None)
-        print('AFTER EXPANSION :', tree[2] , branch)
         # print('prarent :', parent)
         # replace macro call branch by macro definition branch
         # first, add the "return" register command to the new branch
