@@ -1,0 +1,7 @@
+resolve r0 problem
+    r0 keep its onfo between macro calls
+        Either reset r0 after every macro call (what is currently done) but then you can't use that register because 
+        you could lose what's in its
+        Or have a special register for maco returns ?
+
+make sure macro within macro are exanded
