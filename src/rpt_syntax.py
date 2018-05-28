@@ -171,8 +171,6 @@ def p_reglist(p):
 # to replace each branch that is a macro call by the right macro definition Tree.
 
 def find_macro_def(exp):
-
-    print(exp)
     
     if exp[0] == 'exp':
         if len(exp) == 3: # continue on exp1 and exp2
@@ -192,6 +190,7 @@ def find_macro_def(exp):
 
 def macro_expand(tree, parent):
 
+    done = False
     
     if tree[0] == 'exp':
         if len(tree) == 3: # continue on exp1 and exp2
@@ -200,7 +199,11 @@ def macro_expand(tree, parent):
         elif len(tree) == 2: # continue on exp1 only
             macro_expand(tree[1], tree)
 
-    elif tree[0] == 'macro':
+    elif tree[0] == 'def':
+        parent[1] == 'nil'
+        print('REMOVING FROM TREE')
+
+    if tree[0] == 'macro':
         '''
         tree[1] = return register
         tree[2] = macro id
@@ -223,8 +226,13 @@ def macro_expand(tree, parent):
         # first, add the "return" register command to the new branch
         reg = {'type':'reg', 'val':0}
         move = ['<-', tree[1], reg]
-        branch = ['exp', branch, move]
+        reset = ['<-', {'type':'reg', 'val':0} , {'type':'num', 'val':0}]
+        branch = ['exp', branch, ['exp', move, reset]]
         parent[1] = branch
+    else:
+        done = True
+
+    return done    
     
     
 def exp_to_list(list):
@@ -265,7 +273,6 @@ def replace_register(tree, old_reg, new_reg):
         replace_register(tree[1], old_reg, new_reg)
 
         
-
 
 # ======================
 #    AST evaluation
@@ -407,7 +414,9 @@ abstract_syntax_tree = parser.parse(testData)
 
 # handle macros
 find_macro_def(abstract_syntax_tree)
-macro_expand(abstract_syntax_tree, None)
+done = False
+while not done:
+    done = macro_expand(abstract_syntax_tree, None)
 
 # evaluate the result
 eval(abstract_syntax_tree)
