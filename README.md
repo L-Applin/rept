@@ -33,7 +33,7 @@ Here is the grammar I came up with for the *Repeat* langage
 GRAMMAR                                            ACTIONS & INFO
 ---------------------------------------------      ------------------------------------------------------
 <prog>      ::=    <expr> | <expr> <prog>          A program is a list of expressions
-<expr>     ::=     <cmd> | <mac>                   An expr is either a command or a macro definition
+<expr>      ::=    <cmd> | <mac>                   An expr is either a command or a macro definition
 <cmd>       ::=    <incr>                          There are four different types of commands
                     | <mv>
                     | <rpt>
