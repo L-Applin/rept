@@ -11,7 +11,13 @@ r2 <- 4
 r3 <- 6
 
 r0 <- 0
+
 repeat r1 
-  r4 <- times (r2 r3)
-  r2 <- r4
+    repeat r2
+        repeat r3
+            inc r0
+        end
+    end
+    r4 <- r0
+    r2 <- r4
 end

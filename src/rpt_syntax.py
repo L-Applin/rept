@@ -354,6 +354,8 @@ def eval_repeat(exp):
     if logger.log_eval:
         print('EVAL_REPEAT : ' + str(register[exp[0]["val"]]))
     for n in range(register[exp[0]["val"]]):
+        print('reg :', exp[0])
+        print('repeat body :', exp[1][1])
         eval_body(exp[1][1])
 
 
@@ -387,7 +389,6 @@ def eval(exp):
 #    Program launch
 # ======================
 
-
 # file handling
 testFile = open(CURRENT_TEST, mode="r")
 testData = ""
@@ -418,9 +419,11 @@ parser = yacc.yacc(outputdir="outputs")
 # create the AST
 abstract_syntax_tree = parser.parse(testData)
 
+print(abstract_syntax_tree)
 # handle macros
 find_macro_def(abstract_syntax_tree)
 macro_expand(abstract_syntax_tree, None)
+
 
 # evaluate the result
 eval(abstract_syntax_tree)
